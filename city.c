@@ -1,13 +1,13 @@
 #include "city.h"
 
-Node* createNode(int type) {
+Node* createNode(char type) {
     Node *n = malloc(sizeof(Node));
     n->type = type;
     n->next = NULL;
     return n;
 }
 
-void appendNode(List *list, int type) {
+void appendNode(List *list, char type) {
 
     if (list->head == NULL) {
         list->head = createNode(type);
@@ -31,13 +31,13 @@ List* createList() {
 void printList(List list) {
     Node *curr = list.head;
     while (curr != NULL) {
-        printf("%i ", curr->type);
+        printf("%c ", curr->type);
         curr = curr->next;
     }
     printf("\n");
 }
 
-void print2DList(List city) {
+void printCity(List city) {
     List *currList = &city;
     while (currList != NULL) {
         printList(*currList);
@@ -57,4 +57,28 @@ void appendList(List *city, List *list) {
         curr = curr->nextList;
     }
     curr->nextList = list;
+}
+
+int setLayout(List *city, char *filename) {
+    
+    FILE * layout;
+    layout = fopen(filename, "r");
+    
+    if (layout == NULL) {
+        fprintf(stderr, "Error opening file: %s\n", strerror(errno));
+        return ERROR;
+    }
+
+    char buffer[MAX_SIZE];
+
+    while(fgets(buffer, MAX_SIZE, layout)) {
+        List *row = createList();
+        for (int i = 0; i < strlen(buffer); i += 2) {
+            appendNode(row, buffer[i]);
+        }
+        appendList(city, row);
+    }
+
+    fclose(layout);
+    return 0;
 }

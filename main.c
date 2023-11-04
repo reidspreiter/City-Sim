@@ -1,17 +1,17 @@
 #include "city.h"
 
-int main(void) {
+int main(int argc, char *argv[]) {
 
-    printf("Hello World\n");
-    List *city = createList();
-
-    for (int i = 0; i < 30; i++) {
-        List *nums = createList();
-        appendNode(nums, i);
-        appendNode(nums, i+1);
-        appendNode(nums, i+2);
-        appendList(city, nums);
+    if (argc != 2) {
+        fprintf(stderr, "Usage: ./a.exe <layout filename>");
+        exit(EXIT_FAILURE);
     }
-    print2DList(*city);
+
+    List *city = createList();
+    if (setLayout(city, argv[1]) == ERROR) {
+        exit(EXIT_FAILURE);
+    }
+    
+    printCity(*city);
     return 0;
 }
