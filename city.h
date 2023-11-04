@@ -5,29 +5,21 @@
 #include <stdlib.h>
 
 typedef struct node {
-    char type;
-    int population, pollution;
-    struct node *next, *prev, *up, *down;
+    int type;
+    struct node *next;
 } Node;
 
 typedef struct list {
     Node *head;
-    struct list *next;
+    struct list *nextList;
 } List;
 
-typedef struct city {
-    List *head;
-    int population, workers, goods, pollution;
-} City;
-
-Node* createNode(char type);
-
-void appendNode(List *list, char type);
+Node* createNode(int type);
+void appendNode(List *list, int type);
 
 List* createList();
-
-void appendList(City *city, List list);
-
-City createCity();
+void appendList(List *city, List *list);
+void printList(List list);
+void print2DList(List list);
 
 #endif

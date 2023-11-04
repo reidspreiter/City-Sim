@@ -1,35 +1,13 @@
 #include "city.h"
 
-Node* createNode(char type) {
+Node* createNode(int type) {
     Node *n = malloc(sizeof(Node));
     n->type = type;
-    n->population = 0;
-    n->pollution = 0;
     n->next = NULL;
-    n->prev = NULL;
-    n->up = NULL;
-    n->down = NULL;
     return n;
 }
 
-List* createList() {
-    List *l = malloc(sizeof(List));
-    l->head = NULL;
-    l->next = NULL;
-    return l;
-}
-
-City createCity() {
-    City c;
-    c.head = NULL;
-    c.population = 0;
-    c.workers = 0;
-    c.goods = 0;
-    c.pollution = 0;
-    return c;
-}
-
-void appendNode(List *list, char type) {
+void appendNode(List *list, int type) {
 
     if (list->head == NULL) {
         list->head = createNode(type);
@@ -43,28 +21,40 @@ void appendNode(List *list, char type) {
     curr->next = createNode(type);
 }
 
-void appendList(City *city, List *list) {
-
-    if (city->head == NULL) {
-        city->head = list;
-    }
-
-    List *curr = city->head;
-    while (curr->next != NULL) {
-        curr = curr->next;
-    }
-    curr->next = list;
+List* createList() {
+    List *l = malloc(sizeof(List));
+    l->head = NULL;
+    l->nextList = NULL;
+    return l;
 }
 
-void printCity(City city) {
-    List *y = city.head;
-    while (y != NULL) {
-        Node *x = y->head;
-        while (x != NULL) {
-            printf("%c ", x->type);
-        }
-        printf("\n");
-        y = y->next;
+void printList(List list) {
+    Node *curr = list.head;
+    while (curr != NULL) {
+        printf("%i ", curr->type);
+        curr = curr->next;
     }
     printf("\n");
+}
+
+void print2DList(List city) {
+    List *currList = &city;
+    while (currList != NULL) {
+        printList(*currList);
+        currList = currList->nextList;
+    }
+    printf("\n");
+}
+
+void appendList(List *city, List *list) {
+    
+    if (city->head == NULL) {
+        city->head = list->head;
+        return;
+    }
+    List *curr = city;
+    while (curr->nextList != NULL) {
+        curr = curr->nextList;
+    }
+    curr->nextList = list;
 }
