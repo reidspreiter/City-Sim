@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <windows.h>
 
 enum {MAX_SIZE = 100, ERRoR = -1};
 

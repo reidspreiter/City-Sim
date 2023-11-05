@@ -6,9 +6,9 @@
 #include "city.h"
 
 extern pthread_mutex_t mutex;
-extern pthread_cond_t growI, growC;
+extern pthread_cond_t growR, growI, growC;
 
-void growResidential(City *city);
+void *growResidential(void *cityParam);
 void *growIndustrial(void *cityParam);
 void *growCommercial(void *cityParam);
 

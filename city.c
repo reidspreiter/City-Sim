@@ -67,6 +67,7 @@ void printCity(City city) {
     printf("Pop: %i\n", city.population);
     printf("Workers: %i\n", city.workers);
     printf("Goods: %i\n\n", city.goods);
+    //Sleep(10);
 }
 
 void appendList(List *city, List *list) {
