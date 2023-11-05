@@ -6,11 +6,15 @@
 #include <errno.h>
 #include <string.h>
 
-enum {MAX_SIZE = 100, ERROR = -1};
+enum {MAX_SIZE = 100, ERRoR = -1};
 
 typedef struct node {
     char type;
-    struct node *next;
+    int size;
+    struct node *right;
+    struct node *left;
+    struct node *up;
+    struct node *down;
 } Node;
 
 typedef struct list {
@@ -18,14 +22,20 @@ typedef struct list {
     struct list *nextList;
 } List;
 
+typedef struct city {
+    List *layout;
+    int population, workers, goods, pollution;
+} City;
+
 Node* createNode(char type);
 void appendNode(List *list, char type);
 
 List* createList();
 void appendList(List *city, List *list);
 void printList(List list);
-void printCity(List list);
 
+City createCity();
 int setLayout(List *city, char *filename);
+void printCity(City city);
 
 #endif

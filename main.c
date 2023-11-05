@@ -1,4 +1,4 @@
-#include "city.h"
+#include "growth.h"
 
 int main(int argc, char *argv[]) {
 
@@ -7,11 +7,31 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    List *city = createList();
-    if (setLayout(city, argv[1]) == ERROR) {
+    City city = createCity();
+    if (setLayout(city.layout, argv[1]) == ERRoR) {
         exit(EXIT_FAILURE);
     }
-    
-    printCity(*city);
+    printCity(city);
+
+    for (int i = 0; i < 200; i++) {
+        growResidential(&city);
+    }
+
+    // pthread_cond_init(&growI, NULL);
+    // pthread_cond_init(&growC, NULL);
+
+    // pthread_t industrialThread, commercialThread;
+
+    // pthread_mutex_init(&mutex, NULL);
+
+    // pthread_create(&industrialThread, NULL, growIndustrial, &city);
+    // pthread_create(&commercialThread, NULL, growCommercial, &city);
+
+    // pthread_join(industrialThread, NULL);
+    // pthread_join(commercialThread, NULL);
+
+    // pthread_mutex_destroy(&mutex);
+    // pthread_cond_destroy(&growC);
+    // pthread_cond_destroy(&growI);
     return 0;
 }

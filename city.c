@@ -3,7 +3,11 @@
 Node* createNode(char type) {
     Node *n = malloc(sizeof(Node));
     n->type = type;
-    n->next = NULL;
+    n->size = 0;
+    n->right = NULL;
+    n->left = NULL;
+    n->up = NULL;
+    n->down = NULL;
     return n;
 }
 
@@ -15,10 +19,11 @@ void appendNode(List *list, char type) {
     }
 
     Node *curr = list->head;
-    while (curr->next != NULL) {
-        curr = curr->next;
+    while (curr->right != NULL) {
+        curr = curr->right;
     }
-    curr->next = createNode(type);
+    curr->right = createNode(type);
+    curr->right->left = curr;
 }
 
 List* createList() {
@@ -31,19 +36,37 @@ List* createList() {
 void printList(List list) {
     Node *curr = list.head;
     while (curr != NULL) {
-        printf("%c ", curr->type);
-        curr = curr->next;
+        printf("%c", curr->type);
+        if (curr->type == 'R' || curr->type == 'I' || curr->type == 'C') {
+            printf("%i  ", curr->size);
+        } else {
+            printf("%c  ", curr->type);
+        }
+        curr = curr->right;
     }
     printf("\n");
 }
 
-void printCity(List city) {
-    List *currList = &city;
+City createCity() {
+    City c;
+    c.layout = createList();
+    c.population = 0;
+    c.workers = 0;
+    c.goods = 0;
+    c.pollution = 0;
+    return c;
+}
+
+void printCity(City city) {
+    system("cls");
+    List *currList = city.layout;
     while (currList != NULL) {
         printList(*currList);
         currList = currList->nextList;
     }
-    printf("\n");
+    printf("Pop: %i\n", city.population);
+    printf("Workers: %i\n", city.workers);
+    printf("Goods: %i\n\n", city.goods);
 }
 
 void appendList(List *city, List *list) {
@@ -57,6 +80,16 @@ void appendList(List *city, List *list) {
         curr = curr->nextList;
     }
     curr->nextList = list;
+
+    // set up and down pointers
+    Node *top = curr->head;
+    Node *bottom = curr->nextList->head;
+    while (top != NULL && bottom != NULL) {
+        top->down = bottom;
+        bottom->up = top;
+        top = top->right;
+        bottom = bottom->right;
+    }
 }
 
 int setLayout(List *city, char *filename) {
@@ -66,7 +99,7 @@ int setLayout(List *city, char *filename) {
     
     if (layout == NULL) {
         fprintf(stderr, "Error opening file: %s\n", strerror(errno));
-        return ERROR;
+        return ERRoR;
     }
 
     char buffer[MAX_SIZE];
