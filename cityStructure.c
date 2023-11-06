@@ -116,6 +116,7 @@ void printCity(City city) {
 
     List *currList = city.layout;
     while (currList != NULL) {
+        
         Node *curr = currList->head;
         while (curr != NULL) {
 
