@@ -49,19 +49,22 @@ bool checkSurroundings(Node *node) {
 
 void *growResidential(void *cityParam) {
     City *city = cityParam;
-    bool grown;
-    while (1) {
-        grown = false;
+    while (city->grownR) {
+        city->grownR = false;
         List *currList = city->layout;
         while (currList != NULL) {
             Node *curr = currList->head;
             while (curr != NULL) {
+                printf("R: Locking\n");
                 pthread_mutex_lock(&mutex);
                 while (city->workers > 1) {
+                    printf("R: Sleeping\n");
                     pthread_cond_wait(&growR, &mutex);
+                    printf("R: Awake\n");
                 }
                 if (curr->type == 'R' && curr->size < 5 && checkSurroundings(curr)) {
-                    grown = true;
+                    printf("R: Increasing\n");
+                    city->grownR = true;
                     curr->size++;
                     city->population++;
                     city->workers++;
@@ -74,28 +77,26 @@ void *growResidential(void *cityParam) {
             }
             currList = currList->nextList;
         }
-        // if (!grown) {
-        //     printf("R: FINISHED\n");
-        //     break;
-        // }
     }
+    printf("Exiting\n");
 }
 
 void *growIndustrial(void *cityParam) {
     City *city = cityParam;
-    bool grown;
     while (1) {
-        grown = false;
         List *currList = city->layout;
         while (currList != NULL) {
             Node *curr = currList->head;
             while (curr != NULL) {
+                printf("I: Locking\n");
                 pthread_mutex_lock(&mutex);
                 while (city->workers < 2 || (city->workers > 0 && city->goods > 0)) {
+                    printf("I: Sleeping\n");
                     pthread_cond_wait(&growI, &mutex);
+                    printf("I: Awake\n");
                 }
                 if (curr->type == 'I' && curr->size < 5 && checkSurroundings(curr)) {
-                    grown = true;
+                    printf("I: Increasing\n");
                     curr->size++;
                     city->goods++;
                     city->workers -= 2;
@@ -108,28 +109,25 @@ void *growIndustrial(void *cityParam) {
             }
             currList = currList->nextList;
         }
-        // if (!grown) {
-        //     printf("I: FINISHED\n");
-        //     break;
-        // }
     }
 }
 
 void *growCommercial(void *cityParam) {
     City *city = cityParam;
-    bool grown;
     while (1) {
-        grown = false;
         List *currList = city->layout;
         while (currList != NULL) {
             Node *curr = currList->head;
             while (curr != NULL) {
+                printf("C: Locking\n");
                 pthread_mutex_lock(&mutex);
                 while (city->workers == 0 || city->goods == 0) {
+                    printf("C: Sleeping\n");
                     pthread_cond_wait(&growC, &mutex);
+                    printf("C: Awake\n");
                 }
                 if (curr->type == 'C' && curr->size < 5 && checkSurroundings(curr)) {
-                    grown = true;
+                    printf("C: Increasing\n");
                     curr->size++;
                     city->goods--;
                     city->workers--;
@@ -142,9 +140,5 @@ void *growCommercial(void *cityParam) {
             }
             currList = currList->nextList;
         }
-        // if (!grown) {
-        //     printf("C: Finished");
-        //     break;
-        // }
     }
 }

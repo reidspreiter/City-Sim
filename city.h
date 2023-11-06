@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <errno.h>
 #include <string.h>
 #include <windows.h>
@@ -26,6 +27,7 @@ typedef struct list {
 typedef struct city {
     List *layout;
     int population, workers, goods, pollution;
+    bool grownR, grownI, grownC;
 } City;
 
 Node* createNode(char type);

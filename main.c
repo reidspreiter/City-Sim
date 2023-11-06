@@ -26,8 +26,10 @@ int main(int argc, char *argv[]) {
     pthread_create(&commercialThread, NULL, growCommercial, &city);
 
     pthread_join(residentialThread, NULL);
-    pthread_join(industrialThread, NULL);
-    pthread_join(commercialThread, NULL);
+    printf("Exited R\n");
+    pthread_exit(&industrialThread);
+    pthread_exit(&commercialThread);
+    printf("Exited other threads R\n");
 
     pthread_mutex_destroy(&mutex);
     pthread_cond_destroy(&growC);

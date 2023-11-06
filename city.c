@@ -54,11 +54,14 @@ City createCity() {
     c.workers = 0;
     c.goods = 0;
     c.pollution = 0;
+    c.grownR = true;
+    c.grownI = true;
+    c.grownC = true;
     return c;
 }
 
 void printCity(City city) {
-    system("cls");
+    //system("cls");
     List *currList = city.layout;
     while (currList != NULL) {
         printList(*currList);
@@ -67,7 +70,7 @@ void printCity(City city) {
     printf("Pop: %i\n", city.population);
     printf("Workers: %i\n", city.workers);
     printf("Goods: %i\n\n", city.goods);
-    //Sleep(10);
+    //Sleep(100);
 }
 
 void appendList(List *city, List *list) {
